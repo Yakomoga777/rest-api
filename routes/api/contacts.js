@@ -4,11 +4,16 @@ const router = express.Router();
 const ctrl = require("../../controllers/contacts");
 const CtrlWraper = require("../../helpers/CtrlWraper");
 
-router.get("/", CtrlWraper(ctrl.getList));
-router.get("/:id", CtrlWraper(ctrl.getContactById));
-router.post("/", CtrlWraper(ctrl.addContact));
-router.put("/:id", CtrlWraper(ctrl.updateContact));
-router.patch("/:id/favorite", CtrlWraper(ctrl.updateFavorite));
-router.delete("/:id", CtrlWraper(ctrl.removeContact));
+router
+  .route("/")
+  .get(CtrlWraper(ctrl.getList))
+  .post(CtrlWraper(ctrl.addContact));
+router
+  .route("/:id")
+  .get(CtrlWraper(ctrl.getContactById))
+  .put(CtrlWraper(ctrl.updateContact))
+  .delete(CtrlWraper(ctrl.removeContact));
+
+router.route("/:id/favorite").patch(CtrlWraper(ctrl.updateFavorite));
 
 module.exports = router;
