@@ -1,13 +1,11 @@
-// const Joi = require("joi");
-
 const { HttpError } = require("../helpers");
 
 const contacts = require("../services/contactsServices");
-
 const contactValidationSchema = require("../helpers/joiValidation/contactsValidation");
+const { Contact } = require("../models/contactsModel");
 
 const getList = async (req, res, next) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
