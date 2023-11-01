@@ -1,7 +1,10 @@
 const { HttpError } = require("../helpers");
 
-const contacts = require("../services/contactsServices");
-const contactValidationSchema = require("../helpers/joiValidation/contactsValidation");
+// const contacts = require("../services/contactsServices");
+const {
+  contactValidationSchema,
+  favoriteValidationSchema,
+} = require("../helpers/joiValidation/contactsValidation");
 const { Contact } = require("../models/contactsModel");
 
 const getList = async (req, res, next) => {
@@ -43,6 +46,20 @@ const updateContact = async (req, res, next) => {
   res.json(result);
 };
 
+const updateFavorite = async (req, res, next) => {
+  const { error } = favoriteValidationSchema.validate(req.body);
+  if (error) {
+    throw HttpError(400, error.message);
+  }
+
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, "CONTACT NOT FOUND 🤷‍♂️");
+  }
+  res.json(result);
+};
+
 const removeContact = async (req, res, next) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndDelete(id);
@@ -57,4 +74,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateFavorite,
 };

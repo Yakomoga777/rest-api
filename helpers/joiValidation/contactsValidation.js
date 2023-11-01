@@ -8,4 +8,8 @@ const contactValidationSchema = Joi.object({
     .required(),
 });
 
-module.exports = contactValidationSchema;
+const favoriteValidationSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = { contactValidationSchema, favoriteValidationSchema };
