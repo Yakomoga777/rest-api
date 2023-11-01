@@ -1,14 +1,10 @@
-const Joi = require("joi");
+// const Joi = require("joi");
 
 const { HttpError } = require("../helpers");
 
 const contacts = require("../services/contactsServices");
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+const contactValidationSchema = require("../helpers/joiValidation/contactsValidation");
 
 const getList = async (req, res, next) => {
   const result = await contacts.listContacts();
@@ -26,19 +22,21 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const { error } = schema.validate(req.body);
+  const { error } = contactValidationSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
+
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
 
 const updateContact = async (req, res, next) => {
-  const { error } = schema.validate(req.body);
+  const { error } = contactValidationSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
+
   const { id } = req.params;
   const result = await contacts.updateContact(id, req.body);
   if (!result) {
