@@ -3,7 +3,7 @@ const CrtlWraper = (fn) => {
     try {
       await fn(req, res, next);
     } catch (error) {
-      console.log(`err.code - ${err.code}`);
+      // console.log(`err.code - ${error.code}`);
       next(error);
     }
   };

@@ -1,11 +1,10 @@
 const { HttpError } = require("../helpers");
 
-// const contacts = require("../services/contactsServices");
 const {
   contactValidationSchema,
   favoriteValidationSchema,
-} = require("../helpers/joiValidation/contactsValidation");
-const { Contact } = require("../models/contactsModel");
+} = require("../helpers/joiValidation/contactValidationSchema");
+const { Contact } = require("../models/contacts");
 
 const getList = async (req, res, next) => {
   const result = await Contact.find();
