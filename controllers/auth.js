@@ -28,10 +28,10 @@ const register = async (req, res) => {
   });
 };
 const login = async (req, res) => {
-  // const { error } = userSchema.loginSchema.validate(req.body);
-  // if (error) {
-  //   throw HttpError(400, error.message);
-  // }
+  const { error } = userSchema.loginSchema.validate(req.body);
+  if (error) {
+    throw HttpError(400, error.message);
+  }
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 

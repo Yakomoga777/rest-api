@@ -7,7 +7,8 @@ const {
 const { Contact } = require("../models/contacts");
 
 const getList = async (req, res, next) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner });
   res.json(result);
 };
 
@@ -26,8 +27,9 @@ const addContact = async (req, res, next) => {
   if (error) {
     throw HttpError(400, error.message);
   }
+  const { _id: owner } = req.user;
 
-  const result = await Contact.create(req.body);
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
