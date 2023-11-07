@@ -18,6 +18,10 @@ const userSchema = new Schema({
     require: true,
     min: 6,
   },
+  token: {
+    type: String,
+    default: "",
+  },
 });
 
 userSchema.post("save", handleMongooseError);

@@ -3,16 +3,17 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/contacts");
 const CtrlWraper = require("../../helpers/CtrlWraper");
+const { authenticate } = require("../../middleware");
 
 router
   .route("/")
-  .get(CtrlWraper(ctrl.getList))
-  .post(CtrlWraper(ctrl.addContact));
+  .get(authenticate, CtrlWraper(ctrl.getList))
+  .post(authenticate, CtrlWraper(ctrl.addContact));
 router
   .route("/:id")
-  .get(CtrlWraper(ctrl.getContactById))
-  .put(CtrlWraper(ctrl.updateContact))
-  .delete(CtrlWraper(ctrl.removeContact));
+  .get(authenticate, CtrlWraper(ctrl.getContactById))
+  .put(authenticate, CtrlWraper(ctrl.updateContact))
+  .delete(authenticate, CtrlWraper(ctrl.removeContact));
 
 router.route("/:id/favorite").patch(CtrlWraper(ctrl.updateFavorite));
 

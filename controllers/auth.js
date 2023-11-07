@@ -28,10 +28,10 @@ const register = async (req, res) => {
   });
 };
 const login = async (req, res) => {
-  const { error } = userSchema.loginSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
+  // const { error } = userSchema.loginSchema.validate(req.body);
+  // if (error) {
+  //   throw HttpError(400, error.message);
+  // }
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -45,6 +45,14 @@ const login = async (req, res) => {
   }
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+
+  console.log(`payload = ${payload.id}`);
+  console.log(user._id);
+
+  await User.findByIdAndUpdate(payload.id, {
+    token,
+  });
+
   res.json({ token });
 };
 
