@@ -15,6 +15,8 @@ router
   .put(authenticate, CtrlWraper(ctrl.updateContact))
   .delete(authenticate, CtrlWraper(ctrl.removeContact));
 
-router.route("/:id/favorite").patch(CtrlWraper(ctrl.updateFavorite));
+router
+  .route("/:id/favorite")
+  .patch(authenticate, CtrlWraper(ctrl.updateFavorite));
 
 module.exports = router;

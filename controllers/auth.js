@@ -24,7 +24,7 @@ const register = async (req, res) => {
 
   res.status(201).json({
     email: newUser.email,
-    name: newUser.name,
+    subscription: newUser.subscription,
   });
 };
 const login = async (req, res) => {
@@ -53,21 +53,26 @@ const login = async (req, res) => {
     token,
   });
 
-  res.json({ token });
+  res.json({
+    token,
+    user: {
+      email,
+      subscription: user.subscription,
+    },
+  });
 };
 
 const current = async (req, res) => {
-  const { name, email } = req.user;
-  res.json({ name, email });
+  const { email, subscription } = req.user;
+  res.json({ email, subscription });
 };
 
 const logout = async (req, res) => {
-  console.log("LOGOUT");
-  const { id, token } = req.user;
-  console.log(id);
+  const { id } = req.user;
+
   await User.findByIdAndUpdate(id, { token: "" });
 
-  res.json({ message: "Logout succes" });
+  res.status(204).json({ message: "No Content" });
 };
 
 module.exports = {
