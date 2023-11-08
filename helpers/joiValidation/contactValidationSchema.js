@@ -6,6 +6,7 @@ const contactValidationSchema = Joi.object({
   phone: Joi.string()
     .regex(/^\(\d{3}\)-\d{3}-\d{4}$/)
     .required(),
+  favorite: Joi.boolean(),
 });
 
 const favoriteValidationSchema = Joi.object({

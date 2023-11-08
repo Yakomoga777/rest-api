@@ -19,4 +19,6 @@ router
   .route("/:id/favorite")
   .patch(authenticate, CtrlWraper(ctrl.updateFavorite));
 
+// router.route("?favorite=true");
+
 module.exports = router;
