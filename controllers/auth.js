@@ -3,11 +3,11 @@ const jwt = require("jsonwebtoken");
 
 const { CtrlWraper, HttpError } = require("../helpers");
 const { User } = require("../models/");
-const { userSchema } = require("../helpers");
+const { schema } = require("../helpers");
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
-  const { error } = userSchema.registationSchema.validate(req.body);
+  const { error } = schema.registationSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
@@ -28,7 +28,7 @@ const register = async (req, res) => {
   });
 };
 const login = async (req, res) => {
-  const { error } = userSchema.loginSchema.validate(req.body);
+  const { error } = schema.loginSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
@@ -76,14 +76,22 @@ const logout = async (req, res) => {
 };
 
 const updateSubscription = async (req, res) => {
-  console.log("updateSubscription");
+  const { error } = schema.subscriptionValidation.validate(req.body);
+  if (error) {
+    console.log(error.message);
+    throw HttpError(400, error.message);
+  }
 
   const { subscription } = req.body;
   console.log(subscription);
 
   const { id } = req.user;
 
-  const result = await User.findByIdAndUpdate(id, req.body, { new: true });
+  const result = await User.findByIdAndUpdate(
+    id,
+    { subscription },
+    { new: true }
+  );
   console.log(result);
 
   res.json(result);

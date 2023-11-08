@@ -1,6 +1,7 @@
 const Joi = require("joi");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+// const subscribtionLevels = ["starter", "pro", "business"];
 
 const registationSchema = Joi.object({
   name: Joi.string().required(),
@@ -11,10 +12,14 @@ const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
+const subscriptionValidation = Joi.object({
+  subscription: Joi.required().valid("starter", "pro", "business"),
+});
 
 const schema = {
   registationSchema,
   loginSchema,
+  subscriptionValidation,
 };
 
 module.exports = schema;
