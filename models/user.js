@@ -29,7 +29,16 @@ const userSchema = new Schema({
   },
 });
 
+// const updateSubscriptionSchema = new Schema({
+//   subscription: {
+//     type: String,
+//     enum: ["starter", "pro", "business"],
+//     require: true,
+//   },
+// });
+
 userSchema.post("save", handleMongooseError);
+// updateSubscriptionSchema.post("save", handleMongooseError);
 
 const User = model("user", userSchema);
 

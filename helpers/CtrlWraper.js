@@ -1,4 +1,4 @@
-const CrtlWraper = (fn) => {
+const CtrlWraper = (fn) => {
   return async (req, res, next) => {
     try {
       await fn(req, res, next);
@@ -9,4 +9,4 @@ const CrtlWraper = (fn) => {
   };
 };
 
-module.exports = CrtlWraper;
+module.exports = CtrlWraper;

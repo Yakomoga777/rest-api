@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const ctrl = require("../../controllers/contacts");
-const CtrlWraper = require("../../helpers/CtrlWraper");
+const { CtrlWraper } = require("../../helpers");
 const { authenticate } = require("../../middleware");
 
 router
@@ -18,7 +18,5 @@ router
 router
   .route("/:id/favorite")
   .patch(authenticate, CtrlWraper(ctrl.updateFavorite));
-
-// router.route("?favorite=true");
 
 module.exports = router;

@@ -4,9 +4,10 @@ const {
   contactValidationSchema,
   favoriteValidationSchema,
 } = require("../helpers/joiValidation/contactValidationSchema");
+const { User } = require("../models");
 const { Contact } = require("../models/contacts");
 
-const getList = async (req, res, next) => {
+const getList = async (req, res) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
@@ -24,7 +25,7 @@ const getList = async (req, res, next) => {
   res.json(result);
 };
 
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   const id = req.params.id;
   const result = await Contact.findById(id);
 
@@ -34,7 +35,7 @@ const getContactById = async (req, res, next) => {
   res.json(result);
 };
 
-const addContact = async (req, res, next) => {
+const addContact = async (req, res) => {
   const { error } = contactValidationSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
@@ -45,7 +46,7 @@ const addContact = async (req, res, next) => {
   res.status(201).json(result);
 };
 
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   const { error } = contactValidationSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
@@ -59,7 +60,7 @@ const updateContact = async (req, res, next) => {
   res.json(result);
 };
 
-const updateFavorite = async (req, res, next) => {
+const updateFavorite = async (req, res) => {
   const { error } = favoriteValidationSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
@@ -73,7 +74,7 @@ const updateFavorite = async (req, res, next) => {
   res.json(result);
 };
 
-const removeContact = async (req, res, next) => {
+const removeContact = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndDelete(id);
   if (!result) {

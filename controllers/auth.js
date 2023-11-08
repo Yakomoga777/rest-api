@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const { CrtlWraper, HttpError } = require("../helpers");
+const { CtrlWraper, HttpError } = require("../helpers");
 const { User } = require("../models/");
 const { userSchema } = require("../helpers");
 const { SECRET_KEY } = process.env;
@@ -75,9 +75,24 @@ const logout = async (req, res) => {
   res.status(204).json({ message: "No Content" });
 };
 
+const updateSubscription = async (req, res) => {
+  console.log("updateSubscription");
+
+  const { subscription } = req.body;
+  console.log(subscription);
+
+  const { id } = req.user;
+
+  const result = await User.findByIdAndUpdate(id, req.body, { new: true });
+  console.log(result);
+
+  res.json(result);
+};
+
 module.exports = {
-  register: CrtlWraper(register),
-  login: CrtlWraper(login),
-  current: CrtlWraper(current),
-  logout: CrtlWraper(logout),
+  register: CtrlWraper(register),
+  login: CtrlWraper(login),
+  current: CtrlWraper(current),
+  logout: CtrlWraper(logout),
+  updateSubscription: CtrlWraper(updateSubscription),
 };
