@@ -4,7 +4,7 @@ const {
   contactValidationSchema,
   favoriteValidationSchema,
 } = require("../helpers/joiValidation/contactValidationSchema");
-const { User } = require("../models");
+
 const { Contact } = require("../models/contacts");
 
 const getList = async (req, res) => {
