@@ -1,11 +1,15 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+const fs = require("fs/promises");
+const path = require("path");
 
 const { CtrlWraper, HttpError } = require("../helpers");
 const { User } = require("../models/");
 const { schema } = require("../helpers");
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { error } = schema.registationSchema.validate(req.body);
@@ -22,7 +26,6 @@ const register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, 10);
 
   const avatarURL = gravatar.url("email");
-  console.log("avatarURL", avatarURL);
 
   const newUser = await User.create({
     ...req.body,
@@ -53,9 +56,6 @@ const login = async (req, res) => {
   }
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-
-  console.log(`payload = ${payload.id}`);
-  console.log(user._id);
 
   await User.findByIdAndUpdate(payload.id, {
     token,
@@ -105,10 +105,27 @@ const updateSubscription = async (req, res) => {
   res.json(result);
 };
 
+const updateAvatar = async (req, res) => {
+  const { path: tempUpload, originalname } = req.file;
+  const { _id: id } = req.user;
+
+  const fileName = `${id}_${originalname}`;
+  const resultName = path.join(avatarsDir, fileName);
+  await fs.rename(tempUpload, resultName);
+
+  const avatarURL = path.join("avatars", fileName);
+  console.log("avatarURL", avatarURL);
+
+  await User.findByIdAndUpdate(id, { avatarURL });
+  // res.status(200).json({ message: "update Succes" });
+  res.json({ avatarURL });
+};
+
 module.exports = {
   register: CtrlWraper(register),
   login: CtrlWraper(login),
   current: CtrlWraper(current),
   logout: CtrlWraper(logout),
   updateSubscription: CtrlWraper(updateSubscription),
+  updateAvatar: CtrlWraper(updateAvatar),
 };
