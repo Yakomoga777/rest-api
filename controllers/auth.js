@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
+const Jimp = require("jimp");
 
 const { CtrlWraper, HttpError } = require("../helpers");
 const { User } = require("../models/");
@@ -117,7 +118,14 @@ const updateAvatar = async (req, res) => {
   console.log("avatarURL", avatarURL);
 
   await User.findByIdAndUpdate(id, { avatarURL });
-  // res.status(200).json({ message: "update Succes" });
+
+  Jimp.read(fileName, (err, lenna) => {
+    if (err) throw err;
+    lenna
+      .resize(250, 250) // resize
+      .write(`${resultName}-small-avatar.png`); // save
+  });
+
   res.json({ avatarURL });
 };
 
